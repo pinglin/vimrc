@@ -18,11 +18,43 @@ call pathogen#infect()
 
 " General Settings
 
-set nocompatible	" not compatible with the old-fashion vi mode
-set bs=2		" allow backspacing over everything in insert mode
-set history=50		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set autoread		" auto read when file is changed from outside
+set nocompatible  " not compatible with the old-fashion vi mode
+set bs=2          " allow backspacing over everything in insert mode
+set history=50    " keep 50 lines of command line history
+set ruler         " show the cursor position all the time
+set autoread      " auto read when file is changed from outside
+set autowrite     " auto write when normal, insert, command, visual modes switched
+set cursorline    " highlight current line
+set undofile      " save undo history 
+set listchars=tab:▸\ ,eol:¬,extends:>,precedes:< " show invisible characters in a line using 'listchars' to define
+set splitbelow
+set splitright
+set fillchars=diff:⣿
+set title
+set linebreak
+set dictionary=/usr/share/dict/words
+
+set colorcolumn=+1
+set textwidth=80
+set formatoptions+=t
+set wrap
+
+" Backups {{{
+set undodir=~/.vim/tmp/undo//     " undo files
+set backupdir=~/.vim/tmp/backup// " backups
+set directory=~/.vim/tmp/swap//   " swap files
+set nobackup                      " disable backups
+set noswapfile                    
+" }}}
+
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+set notimeout
+set ttimeout
+set ttimeoutlen=10
 
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
@@ -31,21 +63,24 @@ filetype plugin on    " Enable filetype-specific plugins
 " auto reload vimrc when editing it
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
+" Save when losing focus
+autocmd FocusLost * :silent! wall
+
+" Resize splits when the window is resized
+autocmd VimResized * :wincmd =
 
 syntax on		" syntax highlight
-set hlsearch		" search highlighting
+set hlsearch	" search highlighting
 
 set guifont=Consolas\ 12
-
 if has("gui_macvim")
    set guifont=Consolas:h12
 elseif has("gui_win32")
-   set guifont=Consolas:h11
+   set guifont=Consola:h12
 end
 
 if has("gui_running")	" GUI color and font settings
    set background=dark 
-   set cursorline        " highlight current line
    colors moria
    highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
 else
@@ -58,7 +93,8 @@ set clipboard=unnamed	" yank to the system register (*) by default
 set showmatch		" Cursor shows matching ) and }
 set showmode		" Show current mode
 set wildchar=<TAB>	" start wild expansion in the command line using <TAB>
-set wildmenu            " wild char completion menu
+set wildmenu        " wild char completion menu
+set cot-=preview    "disable doc preview in clang_complete
 
 " ignore these files while expanding wild chars
 set wildignore=*.o,*.class,*.pyc
@@ -78,13 +114,13 @@ set t_vb=
 set tm=500
 
 " TAB setting{
-set expandtab        "replace <TAB> with spaces
-set tabstop=4 
-set softtabstop=4 
-set shiftwidth=4 
+set tabstop=3
+set softtabstop=3
+set shiftwidth=3
+set shiftround
 
-au FileType Makefile set noexpandtab
-"}      							
+autocmd FileType Makefile set noexpandtab
+"}
 
 " status line {
 set laststatus=2
@@ -112,14 +148,14 @@ endfunction
 autocmd BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in runtime! indent/cmake.vim 
 autocmd BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
 autocmd BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
-" }
+"}
 
 " C/C++ specific settings
 autocmd FileType c,cpp,cc  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
 
 "Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 "--------------------------------------------------------------------------- 
 " Tip #382: Search for <cword> and replace with input() in all open buffers 
@@ -128,18 +164,40 @@ fun! Replace()
   let s:word = input("Replace " . expand('<cword>') . " with:") 
   :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge' 
   :unlet! s:word 
-endfun 
+endfunction 
 
 
 "--------------------------------------------------------------------------- 
 " USEFUL SHORTCUTS
 "--------------------------------------------------------------------------- 
+
+" Make search expressions very magic
+nnoremap / /\v
+vnoremap / /\v
+
+" keep search stuffs with cursor targeted at the middle of screen{
+" Don't move on *
+" nnoremap * *<c-o>
+
+"  c-\ to do c-] but open it in a new split.
+nnoremap <c-\> <c-w>v<c-]>zvzz
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+"}
+
 " set leader to ,
 let mapleader=","
 let g:mapleader=","
 
 "replace the current word in all opened buffers
-map <leader>r :call Replace()<CR>
+map <leader>R :call Replace()<CR>
 
 " open the error console
 map <leader>cc :botright cope<CR> 
@@ -149,16 +207,35 @@ map <leader>] :cn<CR>
 map <leader>[ :cp<CR>
 
 " --- move around splits {
+" set the min width of a window to 0 so we can maximize others 
+"set wmw=0 
+" set the min height of a window to 0 so we can maximize others
+"set wmh=0
 " move to and maximize the below split 
-map <C-J> <C-W>j<C-W>_
+"map <c-w>j <c-w>j<c-w>_
 " move to and maximize the above split 
-map <C-K> <C-W>k<C-W>_
+"map <c-w>k <c-w>k<c-w>_
 " move to and maximize the left split 
-nmap <c-h> <c-w>h<c-w><bar>
+"map <c-w>h <c-w>h<c-w><bar>
 " move to and maximize the right split  
-nmap <c-l> <c-w>l<c-w><bar>
-set wmw=0                     " set the min width of a window to 0 so we can maximize others 
-set wmh=0                     " set the min height of a window to 0 so we can maximize others
+"map <c-w>l <c-w>l<c-w><bar>
+
+" move to the below split 
+map <c-j> <c-w>j
+" move to the above split 
+map <c-k> <c-w>k
+" move to the left split 
+map <c-h> <c-w>h
+" move to the right split  
+map <c-l> <c-w>l
+
+" Maps Alt-[h,j,k,l] to resizing a window split
+if bufwinnr(1)
+	map - 10<C-W><
+	map _ 10<C-W>-
+	map + 10<C-W>+
+	map = 10<C-W>>
+endif
 " }
 
 " move around tabs. conflict with the original screen top/bottom
@@ -174,7 +251,7 @@ map <C-t><C-t> :tabnew<CR>
 map <C-t><C-w> :tabclose<CR> 
 
 " ,/ turn off search highlighting
-nmap <leader>/ :nohl<CR>
+nmap <leader><space> :nohls<CR>
 
 " Bash like keys for the command line
 cnoremap <C-A>      <Home>
@@ -209,6 +286,15 @@ noremap  <C-u>5 yypVr^
 inoremap <C-u>5 <esc>yypVr^A
 "}
 
+" Highlight word {
+
+nnoremap <silent> <leader>hh :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<cr>
+
+"}
+
 "--------------------------------------------------------------------------- 
 " PROGRAMMING SHORTCUTS
 "--------------------------------------------------------------------------- 
@@ -226,27 +312,6 @@ fun! IncludeGuard()
   call append( line("$"), "#endif // for #ifndef " . guard)
 endfun
 
-
-
-" Enable omni completion. (Ctrl-X Ctrl-O)
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType java set omnifunc=javacomplete#Complete
-
-" use syntax complete if nothing else available
-if has("autocmd") && exists("+omnifunc")
-  autocmd Filetype *
-           \	if &omnifunc == "" |
-           \		setlocal omnifunc=syntaxcomplete#Complete |
-           \	endif
-endif
-
-set cot-=preview "disable doc preview in omnicomplete
-
 " make CSS omnicompletion work for SASS and SCSS
 autocmd BufNewFile,BufRead *.scss             set ft=scss.css
 autocmd BufNewFile,BufRead *.sass             set ft=sass.css
@@ -261,12 +326,12 @@ set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
 
 fun! ViewUTF8()
   set encoding=utf-8                                  
-  set termencoding=big5
+  set termencoding=utf-8
 endfun
 
 fun! UTF8()
   set encoding=utf-8                                  
-  set termencoding=big5
+  set termencoding=utf-8
   set fileencoding=utf-8
   set fileencodings=ucs-bom,big5,utf-8,latin1
 endfun
@@ -281,6 +346,12 @@ endfun
 " PLUGIN SETTINGS
 "--------------------------------------------------------------------------- 
 
+" ------- vim-mark - highlighting multiply identifiers {
+
+
+
+
+"}
 
 " ------- vim-latex - many latex shortcuts and snippets {
 
@@ -342,3 +413,4 @@ let g:tagbar_autofocus = 1
 let g:snipMateAllowMatchingDot = 0
 
 set t_Co=256    " force 256 colors mode whether in gui or terminal mode"
+highlight ColorColumn ctermbg=0

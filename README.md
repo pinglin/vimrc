@@ -16,6 +16,14 @@ This folk is for adding more plugin for C/C++ IDE environment.
 What's new
 ----------------
 
+2012/08/25
+
+1. Switched OmniCppComplete to [clang-complete](https://github.com/Rip-Rip/clang_complete), a more previce C/C++ auto-complete plugin
+
+2. Added vim-mark plugin
+
+3. Added more setting for handy window resizing in vimrc
+
 2012/08/24
 
 1. [CMake systax highlighting and indentation](http://www.cmake.org/Wiki/CMake_Editors_Support)

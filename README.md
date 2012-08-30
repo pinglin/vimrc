@@ -16,9 +16,13 @@ This folk is for adding more plugin for C/C++ IDE environment.
 What's new
 ----------------
 
+2012/08/27
+
+1. Add more shorcuts for windows switching using Alt+ 
+
 2012/08/25
 
-1. Switched OmniCppComplete to [clang-complete](https://github.com/Rip-Rip/clang_complete), a more previce C/C++ auto-complete plugin
+1. Switched OmniCppComplete to [clang_complete](https://github.com/Rip-Rip/clang_complete), a more precise C/C++ auto-complete plugin
 
 2. Added vim-mark plugin
 

@@ -1,9 +1,6 @@
-" vgod's vimrc
-" Tsung-Hsiang (Sean) Chang <vgod@vgod.tw>
-" Fork me on GITHUB  https://github.com/vgod/vimrc
-
-" read https://github.com/vgod/vimrc/blob/master/README.md for more info
-
+" Pinglin's vimrc
+" Ping-Lin Chang <p.chang10@imperial.ac.uk>
+" Fork me on GITHUB  https://github.com/pinglin/vimrc
 
 " For pathogen.vim: auto load all plugins in .vim/bundle
 call pathogen#infect()
@@ -26,10 +23,13 @@ set autoread      " auto read when file is changed from outside
 set autowrite     " auto write when normal, insert, command, visual modes switched
 set cursorline    " highlight current line
 set undofile      " save undo history 
-set listchars=tab:▸\ ,eol:¬,extends:>,precedes:< " show invisible characters in a line using 'listchars' to define
+set pastetoggle=<F12> " deal with terminal paste
+
+" show invisible characters in a line using 'listchars' to define
+set listchars=tab:►»,eol:▽,extends:>,precedes:< 
 set splitbelow
 set splitright
-set fillchars=diff:⣿
+set fillchars=diff:░
 set title
 set linebreak
 set dictionary=/usr/share/dict/words
@@ -37,7 +37,7 @@ set dictionary=/usr/share/dict/words
 set colorcolumn=+1
 set textwidth=80
 set formatoptions+=t
-set wrap
+set nowrap
 
 " Backups {{{
 set undodir=~/.vim/tmp/undo//     " undo files
@@ -94,7 +94,7 @@ set showmatch		" Cursor shows matching ) and }
 set showmode		" Show current mode
 set wildchar=<TAB>	" start wild expansion in the command line using <TAB>
 set wildmenu        " wild char completion menu
-set cot-=preview    "disable doc preview in clang_complete
+set cot-=preview    "disable doc preview 
 
 " ignore these files while expanding wild chars
 set wildignore=*.o,*.class,*.pyc
@@ -171,13 +171,36 @@ endfunction
 " USEFUL SHORTCUTS
 "--------------------------------------------------------------------------- 
 
-" Make search expressions very magic
+" save file
+noremap s <C-C>:w<CR>
+inoremap s <C-O>:w<CR><ESC>
+
+" update vimrc right away
+noremap v <C-C>:source ~/.vim/vimrc<CR>
+inoremap v <C-O>:source ~/.vim/vimrc<CR><ESC>
+
+" map ctrl+c to : for switching normal to command model
+nnoremap <c-c> :
+
+" map ctrl+l as delete in insert mode
+inoremap <c-l> <delete>
+
+" [[ jump out of the tag stack (undo Ctrl-])
+map [[ :po<CR>
+
+noremap <silent> <F2> "=strftime('%Y/%m/%d')<C-M>p
+inoremap <silent> <F2> <C-R>=strftime('%Y/%m/%d')<C-M>
+
+" make cursor fixed bewteen insert and normal mode switch
+autocmd InsertLeave * :normal `^`
+
+" make search expressions very magic
 nnoremap / /\v
 vnoremap / /\v
 
 " keep search stuffs with cursor targeted at the middle of screen{
 " Don't move on *
-" nnoremap * *<c-o>
+"nnoremap * *<c-o>
 
 "  c-\ to do c-] but open it in a new split.
 nnoremap <c-\> <c-w>v<c-]>zvzz
@@ -221,34 +244,65 @@ map <leader>[ :cp<CR>
 "map <c-w>l <c-w>l<c-w><bar>
 
 " move to the below split 
-map <c-j> <c-w>j
+noremap <c-j> <c-w>j
 " move to the above split 
-map <c-k> <c-w>k
+noremap <c-k> <c-w>k
 " move to the left split 
-map <c-h> <c-w>h
+noremap <c-h> <c-w>h
 " move to the right split  
-map <c-l> <c-w>l
+noremap <c-l> <c-w>l
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 if bufwinnr(1)
-	map - 10<C-W><
-	map _ 10<C-W>-
-	map + 10<C-W>+
-	map = 10<C-W>>
+	map - 10<C-W><
+	map _ 10<C-W>-
+	map + 10<C-W>+
+	map = 10<C-W>>
 endif
 " }
 
 " move around tabs. conflict with the original screen top/bottom
 " comment them out if you want the original H/L
 " go to prev tab 
-map <S-H> gT
+nnoremap q gT
+inoremap q <ESC>gT
+vnoremap q <ESC>gT
+
 " go to next tab
-map <S-L> gt
+nnoremap w gt
+inoremap w <ESC>gt
+vnoremap w <ESC>gt
+
+" move tab around
+nnoremap e :tabm<CR>
+inoremap e <C-C>:tabm<CR>
+vnoremap e <C-C>:tabm<CR>
+
+" handy alt+<numer> mapping for switching tabs in all modes
+noremap 1 1gt
+noremap 2 2gt
+noremap 3 3gt
+noremap 4 4gt
+noremap 5 5gt
+noremap 6 6gt
+noremap 7 7gt
+noremap 8 8gt
+noremap 9 9gt
+inoremap 1 <esc>1gt
+inoremap 2 <esc>2gt
+inoremap 3 <esc>3gt
+inoremap 4 <esc>4gt
+inoremap 5 <esc>5gt
+inoremap 6 <esc>6gt
+inoremap 7 <esc>7gt
+inoremap 8 <esc>8gt
+inoremap 9 <esc>9gt
+
 
 " new tab
-map <C-t><C-t> :tabnew<CR>
+nnoremap <C-t>t :tabnew<CR>
 " close tab
-map <C-t><C-w> :tabclose<CR> 
+nnoremap <C-t>w :tabclose<CR> 
 
 " ,/ turn off search highlighting
 nmap <leader><space> :nohls<CR>
@@ -256,6 +310,10 @@ nmap <leader><space> :nohls<CR>
 " Bash like keys for the command line
 cnoremap <C-A>      <Home>
 cnoremap <C-E>      <End>
+cnoremap <C-B>      <LEFT>
+cnoremap <C-F>      <RIGHT>
+cnoremap <C-H>      <BACKSPACE>
+cnoremap <C-L>      <DELETE>
 cnoremap <C-K>      <C-U>
 
 " ,p toggles paste mode
@@ -268,36 +326,100 @@ vnoremap > >gv
 " :cd. change working directory to that of the current file
 cmap cd. lcd %:p:h
 
-" Writing Restructured Text (Sphinx Documentation) {
-" Ctrl-u 1:    underline Parts w/ #'s
-noremap  <C-u>1 yyPVr#yyjp
-inoremap <C-u>1 <esc>yyPVr#yyjpA
-" Ctrl-u 2:    underline Chapters w/ *'s
-noremap  <C-u>2 yyPVr*yyjp
-inoremap <C-u>2 <esc>yyPVr*yyjpA
-" Ctrl-u 3:    underline Section Level 1 w/ ='s
-noremap  <C-u>3 yypVr=
-inoremap <C-u>3 <esc>yypVr=A
-" Ctrl-u 4:    underline Section Level 2 w/ -'s
-noremap  <C-u>4 yypVr-
-inoremap <C-u>4 <esc>yypVr-A
-" Ctrl-u 5:    underline Section Level 3 w/ ^'s
-noremap  <C-u>5 yypVr^
-inoremap <C-u>5 <esc>yypVr^A
+"" Writing Restructured Text (Sphinx Documentation) {
+"" Ctrl-u 1:    underline Parts w/ #'s
+"noremap  <C-u>1 yyPVr#yyjp
+"inoremap <C-u>1 <esc>yyPVr#yyjpA
+"" Ctrl-u 2:    underline Chapters w/ *'s
+"noremap  <C-u>2 yyPVr*yyjp
+"inoremap <C-u>2 <esc>yyPVr*yyjpA
+"" Ctrl-u 3:    underline Section Level 1 w/ ='s
+"noremap  <C-u>3 yypVr=
+"inoremap <C-u>3 <esc>yypVr=A
+"" Ctrl-u 4:    underline Section Level 2 w/ -'s
+"noremap  <C-u>4 yypVr-
+"inoremap <C-u>4 <esc>yypVr-A
+"" Ctrl-u 5:    underline Section Level 3 w/ ^'s
+"noremap  <C-u>5 yypVr^
+"inoremap <C-u>5 <esc>yypVr^A
 "}
 
-" Highlight word {
+" TabLine labels. A more neat representation. {
 
-nnoremap <silent> <leader>hh :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<cr>
+if has('gui')
+	set guioptions-=e
+endif
+if exists("+showtabline")
+	function MyTabLine()
+		let s = ''
+		let t = tabpagenr()
+		let i = 1
+		while i <= tabpagenr('$')
+			let buflist = tabpagebuflist(i)
+			let winnr = tabpagewinnr(i)
+			let s .= '%' . i . 'T'
+			let s .= (i == t ? '%1*' :	'%2*')
+			let s .= ' '
+			let s .= i . ':'
+			let s .=	winnr . '/' . tabpagewinnr(i,'$')
+			let s	.=	' %*'
+			let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+			let bufnr = buflist[winnr - 1]
+			let file = bufname(bufnr)
+			let buftype	= getbufvar(bufnr, 'buftype')
+			if buftype == 'nofile'
+				if file =~ '\/.'
+					let file = substitute(file, '.*\/\ze.', '', '')
+				endif
+			else
+				let file = fnamemodify(file, ':p:t')
+			endif
+			if file == ''
+				let file = '[No Name]'
+			endif
+			let s	.=	file
+			let i = i + 1
+		endwhile
+		let s .= '%T%#TabLineFill#%='
+		let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+		return s
+	endfunction
+	set tabline=%!MyTabLine()
+endif
 
 "}
+
+
 
 "--------------------------------------------------------------------------- 
 " PROGRAMMING SHORTCUTS
 "--------------------------------------------------------------------------- 
+
+" ---- Useful external commands' shortcut {
+
+cnoremap lll !ls<CR>
+cnoremap lla !ls -al<CR>
+cnoremap pwd !pwd<CR>
+
+" }
+
+" ---- Git command shorcut {
+
+cnoremap gs !git status -s<CR>
+cnoremap gr !git remote -v<CR>
+cnoremap gc !git commit -am ""<left>
+cnoremap gremote !git remote  
+cnoremap gpull !git pull 
+cnoremap gpush !git push
+
+" }
+
+" ---- Makefile shortcut {
+
+" compile mapping
+map <c-b> :!make -j8<CR>
+
+"}
 
 " Ctrl-[ jump out of the tag stack (undo Ctrl-])
 map <C-[> <ESC>:po<CR>
@@ -313,8 +435,8 @@ fun! IncludeGuard()
 endfun
 
 " make CSS omnicompletion work for SASS and SCSS
-autocmd BufNewFile,BufRead *.scss             set ft=scss.css
-autocmd BufNewFile,BufRead *.sass             set ft=sass.css
+"autocmd BufNewFile,BufRead *.scss             set ft=scss.css
+"autocmd BufNewFile,BufRead *.sass             set ft=sass.css
 
 "--------------------------------------------------------------------------- 
 " ENCODING SETTINGS
@@ -346,12 +468,32 @@ endfun
 " PLUGIN SETTINGS
 "--------------------------------------------------------------------------- 
 
-" ------- vim-mark - highlighting multiply identifiers {
+" ---- clang_complete - C/C++ autocompletion tool using clang {
 
+let g:clang_auto_select=0
+let g:clang_complete_auto=0
+let g:clang_complete_copen=1
+let g:clang_hl_errors=1
+let g:clang_periodic_quickfix=0
+let g:clang_snippets=1
+let g:clang_snippets_engine="clang_complete"
+let g:clang_conceal_snippets=1
+let g:clang_exec="clang"
+let g:clang_user_options=""
+let g:clang_auto_user_options="path, .clang_complete"
+let g:clang_use_library=1
+let g:clang_library_path="/usr/local/lib"
+let g:clang_sort_algo="priority"
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
+"
+"let g:clic_filename="/path/to/index.db"
+"nnoremap <Leader>r :call ClangGetReferences()<CR>
+"nnoremap <Leader>d :call ClangGetDeclarations()<CR>
+"nnoremap <Leader>s :call ClangGetSubclasses()<CR>
 
-
-
-"}
+" }
 
 " ------- vim-latex - many latex shortcuts and snippets {
 
@@ -388,10 +530,10 @@ endif
 let g:CommandTMaxHeight = 15
 
 " --- SuperTab
+"call SuperTabSetDefaultCompletionType(' ')
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
-
 
 " --- EasyMotion
 "let g:EasyMotion_leader_key = '<Leader>m' " default is <Leader>w
@@ -406,7 +548,7 @@ nnoremap <silent> <F7> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
 " --- PowerLine
-" let g:Powerline_symbols = 'fancy' " require fontpatcher
+"let g:Powerline_symbols = 'unicode'
 "
 
 " --- SnipMate

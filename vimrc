@@ -80,22 +80,15 @@ autocmd VimResized * :wincmd =
 syntax on		" syntax highlight
 set hlsearch	" search highlighting
 
+highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
+colors wombat256
+
 set guifont=Consolas\ 12
 if has("gui_macvim")
    set guifont=Consolas:h12
 elseif has("gui_win32")
    set guifont=Consola:h12
 end
-
-if has("gui_running")	" GUI color and font settings
-   set background=dark 
-   colors moria
-   highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
-else
-   " terminal color settings
-   set background=dark
-   colors wombat256
-endif
 
 set clipboard=unnamed	" yank to the system register (*) by default
 set showmatch		" Cursor shows matching ) and }
@@ -180,12 +173,12 @@ endfunction
 "--------------------------------------------------------------------------- 
 
 " save file
-noremap s <C-C>:w<CR>
-inoremap s <C-O>:w<CR><ESC>
+noremap <leader>s <C-C>:w<CR>
+inoremap <leader>s <C-O>:w<CR><ESC>
 
 " update vimrc right away
-noremap v <C-C>:source $MYVIMRC <CR>
-inoremap v <C-O>:source $MYVIMRC<CR><ESC>
+noremap <leader>v <C-C>:source $MYVIMRC <CR>
+inoremap <leader>v <C-O>:source $MYVIMRC<CR><ESC>
 
 " map ctrl+; to : for switching normal to command model
 nnoremap <c-c> :
@@ -269,49 +262,49 @@ map <c-l> <c-w>l
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 if bufwinnr(1)
-	map - 10<C-W><
-	map _ 10<C-W>-
-	map + 10<C-W>+
-	map = 10<C-W>>
+	map <leader>- 10<C-W><
+	map <leader>_ 10<C-W>-
+	map <leader>+ 10<C-W>+
+	map <leader>= 10<C-W>>
 endif
 " }
 
 " move around tabs. conflict with the original screen top/bottom
 " comment them out if you want the original H/L
 " go to prev tab 
-nnoremap q gT
-inoremap q <ESC>gT
-vnoremap q <ESC>gT
+nnoremap <leader>q gT
+inoremap <leader>q <ESC>gT
+vnoremap <leader>q <ESC>gT
 
 " go to next tab
-nnoremap w gt
-inoremap w <ESC>gt
-vnoremap w <ESC>gt
+nnoremap <leader>w gt
+inoremap <leader>w <ESC>gt
+vnoremap <leader>w <ESC>gt
 
 " move tab around
-nnoremap e :tabm<CR>
-inoremap e <C-C>:tabm<CR>
-vnoremap e <C-C>:tabm<CR>
+nnoremap <leader>e :tabm<CR>
+inoremap <leader>e <C-C>:tabm<CR>
+vnoremap <leader>e <C-C>:tabm<CR>
 
 " handy alt+<numer> mapping for switching tabs in all modes
-noremap 1 1gt
-noremap 2 2gt
-noremap 3 3gt
-noremap 4 4gt
-noremap 5 5gt
-noremap 6 6gt
-noremap 7 7gt
-noremap 8 8gt
-noremap 9 9gt
-inoremap 1 <esc>1gt
-inoremap 2 <esc>2gt
-inoremap 3 <esc>3gt
-inoremap 4 <esc>4gt
-inoremap 5 <esc>5gt
-inoremap 6 <esc>6gt
-inoremap 7 <esc>7gt
-inoremap 8 <esc>8gt
-inoremap 9 <esc>9gt
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+inoremap <leader>1 <esc>1gt
+inoremap <leader>2 <esc>2gt
+inoremap <leader>3 <esc>3gt
+inoremap <leader>4 <esc>4gt
+inoremap <leader>5 <esc>5gt
+inoremap <leader>6 <esc>6gt
+inoremap <leader>7 <esc>7gt
+inoremap <leader>8 <esc>8gt
+inoremap <leader>9 <esc>9gt
 
 
 " new tab

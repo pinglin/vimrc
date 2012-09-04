@@ -52,7 +52,6 @@ set noswapfile
 set foldmethod=marker   " Fold based on indent
 set foldnestmax=10      " Deepest fold is 10 levels
 set nofoldenable        " Dont fold by default
-nmap <F6> /}<CR>zf%<ESC>:nohlsearch<CR>
 " }}}
 
 " Don't try to highlight lines longer than 800 characters.
@@ -80,7 +79,6 @@ autocmd VimResized * :wincmd =
 syntax on		" syntax highlight
 set hlsearch	" search highlighting
 
-highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
 colors wombat256
 
 set guifont=Consolas\ 12
@@ -172,6 +170,10 @@ endfunction
 " USEFUL SHORTCUTS
 "--------------------------------------------------------------------------- 
 
+" set leader to ,
+let mapleader=","
+let g:mapleader=","
+
 " save file
 noremap <leader>s <C-C>:w<CR>
 inoremap <leader>s <C-O>:w<CR><ESC>
@@ -216,9 +218,6 @@ nnoremap g, g,zz
 nnoremap <c-o> <c-o>zz
 "}
 
-" set leader to ,
-let mapleader=","
-let g:mapleader=","
 
 " handy edit commands
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -479,13 +478,8 @@ let g:clang_library_path="/usr/local/lib"
 let g:clang_sort_algo="priority"
 let g:clang_complete_macros=1
 let g:clang_complete_patterns=0
-nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
+nnoremap <Leader>clang :call g:ClangUpdateQuickFix()<CR>
 "
-"let g:clic_filename="/path/to/index.db"
-"nnoremap <Leader>r :call ClangGetReferences()<CR>
-"nnoremap <Leader>d :call ClangGetDeclarations()<CR>
-"nnoremap <Leader>s :call ClangGetSubclasses()<CR>
-
 " }}}
 
 " ------- vim-latex - many latex shortcuts and snippets {{{
@@ -538,7 +532,7 @@ hi link EasyMotionShade  Comment
 nnoremap <silent> <F7> :TagbarToggle<CR> 
 " set focus to TagBar when opening it
 let g:tagbar_autofocus = 1
-let g:tagbar_ctags_bin = '/usr/bin/ctags'
+let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " }}}
 
@@ -558,4 +552,5 @@ nnoremap <silent> <F9> :NERDTreeClose<CR>
 " }}}
 
 set t_Co=256    " force 256 colors mode whether in gui or terminal mode"
-highlight ColorColumn ctermbg=0
+highlight CursorLine guibg=#003853 ctermbg=24  gui=none cterm=none
+highlight ColorColumn ctermbg=darkgrey guibg=darkgrey

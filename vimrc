@@ -17,13 +17,15 @@ call pathogen#infect()
 
 set nocompatible  " not compatible with the old-fashion vi mode
 set bs=2          " allow backspacing over everything in insert mode
-set history=50    " keep 50 lines of command line history
+set history=1000  " keep 50 lines of command line history
 set ruler         " show the cursor position all the time
 set autoread      " auto read when file is changed from outside
 set autowrite     " auto write when normal, insert, command, visual modes switched
 set cursorline    " highlight current line
 set undofile      " save undo history 
+set undolevels=1000   " save undo history 
 set pastetoggle=<F12> " deal with terminal paste
+set backspace=indent,eol,start
 
 " show invisible characters in a line using 'listchars' to define
 set listchars=tab:►»,eol:▽,extends:>,precedes:< 
@@ -40,11 +42,17 @@ set formatoptions+=t
 set nowrap
 
 " Backups {{{
-set undodir=~/.vim/tmp/undo//     " undo files
-set backupdir=~/.vim/tmp/backup// " backups
-set directory=~/.vim/tmp/swap//   " swap files
+"set undodir=~/.vim/tmp/undo//     " undo files
+"set directory=~/.vim/tmp/swap//   " swap files
 set nobackup                      " disable backups
 set noswapfile                    
+" }}}
+
+" Folding setting {{{
+set foldmethod=marker   " Fold based on indent
+set foldnestmax=10      " Deepest fold is 10 levels
+set nofoldenable        " Dont fold by default
+nmap <F6> /}<CR>zf%<ESC>:nohlsearch<CR>
 " }}}
 
 " Don't try to highlight lines longer than 800 characters.
@@ -85,7 +93,7 @@ if has("gui_running")	" GUI color and font settings
    highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
 else
    " terminal color settings
-   set background=dark 
+   set background=dark
    colors wombat256
 endif
 
@@ -101,7 +109,6 @@ set wildignore=*.o,*.class,*.pyc
 
 set autoindent		" auto indentation
 set incsearch		" incremental search
-set nobackup		" no *~ backup files
 set copyindent		" copy the previous indentation on autoindenting
 set ignorecase		" ignore case when searching
 set smartcase		" ignore case if search pattern is all lowercase,case-sensitive otherwise
@@ -151,7 +158,8 @@ autocmd BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
 "}
 
 " C/C++ specific settings
-autocmd FileType c,cpp,cc  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
+autocmd FileType c,cpp,cc,h  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
+map <F1> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
@@ -176,10 +184,10 @@ noremap s <C-C>:w<CR>
 inoremap s <C-O>:w<CR><ESC>
 
 " update vimrc right away
-noremap v <C-C>:source ~/.vim/vimrc<CR>
-inoremap v <C-O>:source ~/.vim/vimrc<CR><ESC>
+noremap v <C-C>:source $MYVIMRC <CR>
+inoremap v <C-O>:source $MYVIMRC<CR><ESC>
 
-" map ctrl+c to : for switching normal to command model
+" map ctrl+; to : for switching normal to command model
 nnoremap <c-c> :
 
 " map ctrl+l as delete in insert mode
@@ -192,7 +200,7 @@ noremap <silent> <F2> "=strftime('%Y/%m/%d')<C-M>p
 inoremap <silent> <F2> <C-R>=strftime('%Y/%m/%d')<C-M>
 
 " make cursor fixed bewteen insert and normal mode switch
-autocmd InsertLeave * :normal `^`
+"autocmd InsertLeave * :normal `^`
 
 " make search expressions very magic
 nnoremap / /\v
@@ -219,6 +227,13 @@ nnoremap <c-o> <c-o>zz
 let mapleader=","
 let g:mapleader=","
 
+" handy edit commands
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
+
 "replace the current word in all opened buffers
 map <leader>R :call Replace()<CR>
 
@@ -233,24 +248,24 @@ map <leader>[ :cp<CR>
 " set the min width of a window to 0 so we can maximize others 
 "set wmw=0 
 " set the min height of a window to 0 so we can maximize others
-"set wmh=0
+set wmh=0
 " move to and maximize the below split 
-"map <c-w>j <c-w>j<c-w>_
+map <c-j> <c-w>j<c-w>_
 " move to and maximize the above split 
-"map <c-w>k <c-w>k<c-w>_
+map <c-k> <c-w>k<c-w>_
 " move to and maximize the left split 
-"map <c-w>h <c-w>h<c-w><bar>
+"map <c-h> <c-w>h<c-w><bar>
 " move to and maximize the right split  
-"map <c-w>l <c-w>l<c-w><bar>
+"map <c-l> <c-w>l<c-w><bar>
 
-" move to the below split 
-noremap <c-j> <c-w>j
-" move to the above split 
-noremap <c-k> <c-w>k
-" move to the left split 
-noremap <c-h> <c-w>h
-" move to the right split  
-noremap <c-l> <c-w>l
+"" move to the below split 
+"noremap <c-j> <c-w>j
+"" move to the above split 
+"noremap <c-k> <c-w>k
+"" move to the left split 
+map <c-h> <c-w>h
+"" move to the right split  
+map <c-l> <c-w>l
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 if bufwinnr(1)
@@ -300,9 +315,9 @@ inoremap 9 <esc>9gt
 
 
 " new tab
-nnoremap <C-t>t :tabnew<CR>
+noremap <C-t>t :tabnew<CR>
 " close tab
-nnoremap <C-t>w :tabclose<CR> 
+noremap <C-t>w :tabclose<CR> 
 
 " ,/ turn off search highlighting
 nmap <leader><space> :nohls<CR>
@@ -395,34 +410,19 @@ endif
 " PROGRAMMING SHORTCUTS
 "--------------------------------------------------------------------------- 
 
-" ---- Useful external commands' shortcut {
+" ---- Useful external commands' shortcut {{{
 
 cnoremap lll !ls<CR>
 cnoremap lla !ls -al<CR>
-cnoremap pwd !pwd<CR>
 
-" }
+" }}}
 
-" ---- Git command shorcut {
+" ---- Makefile shortcut {{{
 
-cnoremap gs !git status -s<CR>
-cnoremap gr !git remote -v<CR>
-cnoremap gc !git commit -am ""<left>
-cnoremap gremote !git remote  
-cnoremap gpull !git pull 
-cnoremap gpush !git push
-
-" }
-
-" ---- Makefile shortcut {
-
-" compile mapping
+" Compile mapping
 map <c-b> :!make -j8<CR>
 
-"}
-
-" Ctrl-[ jump out of the tag stack (undo Ctrl-])
-map <C-[> <ESC>:po<CR>
+" }}}
 
 " ,g generates the header guard
 map <leader>g :call IncludeGuard()<CR>
@@ -468,7 +468,7 @@ endfun
 " PLUGIN SETTINGS
 "--------------------------------------------------------------------------- 
 
-" ---- clang_complete - C/C++ autocompletion tool using clang {
+" ---- clang_complete - C/C++ autocompletion tool using clang {{{
 
 let g:clang_auto_select=0
 let g:clang_complete_auto=0
@@ -493,9 +493,9 @@ nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
 "nnoremap <Leader>d :call ClangGetDeclarations()<CR>
 "nnoremap <Leader>s :call ClangGetSubclasses()<CR>
 
-" }
+" }}}
 
-" ------- vim-latex - many latex shortcuts and snippets {
+" ------- vim-latex - many latex shortcuts and snippets {{{
 
 " IMPORTANT: win32 users will need to have 'shellslash' set so that latex
 " can be called correctly.
@@ -506,10 +506,9 @@ set grepprg=grep\ -nH\ $*
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 
-"}
+"}}}
 
-
-" --- AutoClose - Inserts matching bracket, paren, brace or quote 
+" --- AutoClose - Inserts matching bracket, paren, brace or quote {{{
 " fixed the arrow key problems caused by AutoClose
 if !has("gui_running")	
   set term=linux
@@ -523,36 +522,47 @@ if !has("gui_running")
   nmap OC l
   nmap OD h
 endif
+" }}}
 
-
-
-" --- Command-T
+" --- Command-T {{{
 let g:CommandTMaxHeight = 15
+" }}}
 
-" --- SuperTab
-"call SuperTabSetDefaultCompletionType(' ')
-let g:SuperTabDefaultCompletionType = "context"
+" --- SuperTab {{{
+let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+" }}}
 
-" --- EasyMotion
+" --- EasyMotion {{{
 "let g:EasyMotion_leader_key = '<Leader>m' " default is <Leader>w
 hi link EasyMotionTarget ErrorMsg
 hi link EasyMotionShade  Comment
+" }}}
 
-
-" --- TagBar
+" --- TagBar {{{
 " toggle TagBar with F7
 nnoremap <silent> <F7> :TagbarToggle<CR> 
 " set focus to TagBar when opening it
 let g:tagbar_autofocus = 1
+let g:tagbar_ctags_bin = '/usr/bin/ctags'
+"autocmd BufEnter * nested :call tagbar#autoopen(0)
+" }}}
 
-" --- PowerLine
+" --- PowerLine {{{
 "let g:Powerline_symbols = 'unicode'
-"
+" }}}
 
-" --- SnipMate
-let g:snipMateAllowMatchingDot = 0
+" --- NERDTree {{{
+nnoremap <silent> <F8> :NERDTree<CR>
+nnoremap <silent> <F9> :NERDTreeClose<CR>
+" }}}
+
+" --- SnipMate {{{
+"let g:snipMateAllowMatchingDot = 0
+"let g:snips_trigger_key="<c-a>"
+"let g:snips_trigger_key_backwards='<c-x>'
+" }}}
 
 set t_Co=256    " force 256 colors mode whether in gui or terminal mode"
 highlight ColorColumn ctermbg=0

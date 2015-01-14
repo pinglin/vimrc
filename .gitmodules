@@ -78,7 +78,7 @@
 	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
 [submodule "bundle/snipmate-snippets"]
 	path = bundle/snipmate-snippets
-	url = https://github.com/honza/snipmate-snippets.git
+	url = https://github.com/scrooloose/snipmate-snippets.git
 [submodule "bundle/zencoding-vim"]
 	path = bundle/zencoding-vim
 	url = http://github.com/mattn/zencoding-vim.git

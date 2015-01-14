@@ -100,3 +100,6 @@
 [submodule "bundle/vim-misc"]
 	path = bundle/vim-misc
 	url = https://github.com/xolox/vim-misc.git
+[submodule "bundle/vim-mark"]
+	path = bundle/vim-mark
+	url = https://github.com/vim-scripts/Mark--Karkat.git

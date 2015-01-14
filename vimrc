@@ -79,9 +79,7 @@ autocmd VimResized * :wincmd =
 syntax on		" syntax highlight
 set hlsearch	" search highlighting
 
-colors wombat256
-
-set guifont=Consolas:h12
+set guifont=Monaco\ 12
 if has("gui_macvim")
    set guifont=Monaco:h12
 elseif has("gui_win32")

@@ -1,5 +1,5 @@
 " Pinglin's vimrc
-" Ping-Lin Chang <p.chang10@imperial.ac.uk>
+" Ping-Lin Chang <pinglin02@gmail.com>
 " Fork me on GITHUB  https://github.com/pinglin/vimrc
 
 " For pathogen.vim: auto load all plugins in .vim/bundle
@@ -81,11 +81,11 @@ set hlsearch	" search highlighting
 
 colors wombat256
 
-set guifont=Consolas\ 12
+set guifont=Consolas:h12
 if has("gui_macvim")
-   set guifont=Consolas:h12
+   set guifont=Monaco:h12
 elseif has("gui_win32")
-   set guifont=Consola:h12
+   set guifont=Monaco:h12
 end
 
 set clipboard=unnamed	" yank to the system register (*) by default
@@ -183,10 +183,7 @@ noremap <leader>v <C-C>:source $MYVIMRC <CR>
 inoremap <leader>v <C-O>:source $MYVIMRC<CR><ESC>
 
 " map ctrl+; to : for switching normal to command model
-nnoremap <c-c> :
-
-" map ctrl+l as delete in insert mode
-inoremap <c-l> <delete>
+nnoremap <C-C> :
 
 " [[ jump out of the tag stack (undo Ctrl-])
 map [[ :po<CR>
@@ -254,10 +251,14 @@ map <c-k> <c-w>k<c-w>_
 "noremap <c-j> <c-w>j
 "" move to the above split 
 "noremap <c-k> <c-w>k
+
 "" move to the left split 
-map <c-h> <c-w>h
+nnoremap <C-H> <ESC><C-W>h
+inoremap <C-H> <ESC><C-W>h
+
 "" move to the right split  
-map <c-l> <c-w>l
+nnoremap <C-L> <ESC><C-W>l
+inoremap <C-L> <ESC><C-W>l
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 if bufwinnr(1)
@@ -357,7 +358,7 @@ if has('gui')
 	set guioptions-=e
 endif
 if exists("+showtabline")
-	function MyTabLine()
+	function! MyTabLine()
 		let s = ''
 		let t = tabpagenr()
 		let i = 1
@@ -551,6 +552,12 @@ nnoremap <silent> <F9> :NERDTreeClose<CR>
 "let g:snips_trigger_key_backwards='<c-x>'
 " }}}
 
-set t_Co=256    " force 256 colors mode whether in gui or terminal mode"
-highlight CursorLine guibg=#003853 ctermbg=24  gui=none cterm=none
-highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
+"highlight CursorLine guibg=#003853 ctermbg=24  gui=none cterm=none
+"highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
+
+let base16colorspace=256 " Access colors present in 256 colorspace
+set t_Co=256 " 256 color mode
+
+colorscheme gruvbox
+set background=dark
+let g:gruvbox_contrast_dark="hard"

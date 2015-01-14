@@ -82,3 +82,21 @@
 [submodule "bundle/zencoding-vim"]
 	path = bundle/zencoding-vim
 	url = http://github.com/mattn/zencoding-vim.git
+[submodule "Color-Scheme-Explorer"]
+	path = Color-Scheme-Explorer
+	url = https://github.com/vim-scripts/Color-Scheme-Explorer.git
+[submodule "bundle/Color-Scheme-Explorer"]
+	path = bundle/Color-Scheme-Explorer
+	url = https://github.com/vim-scripts/Color-Scheme-Explorer.git
+[submodule "bundle/Conque-Shell"]
+	path = bundle/Conque-Shell
+	url = https://github.com/vim-scripts/Conque-Shell.git
+[submodule "bundle/gruvbox"]
+	path = bundle/gruvbox
+	url = https://github.com/morhetz/gruvbox.git
+[submodule "bundle/vim-lua-ftplugin"]
+	path = bundle/vim-lua-ftplugin
+	url = https://github.com/xolox/vim-lua-ftplugin.git
+[submodule "bundle/vim-misc"]
+	path = bundle/vim-misc
+	url = https://github.com/xolox/vim-misc.git

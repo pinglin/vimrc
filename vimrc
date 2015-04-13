@@ -113,10 +113,15 @@ set t_vb=
 set tm=500
 
 " TAB setting{
-set tabstop=3
-set softtabstop=3
-set shiftwidth=3
-set shiftround
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+"set tabstop=3
+"set softtabstop=3
+"set shiftwidth=3
+"set shiftround
 
 autocmd FileType Makefile set noexpandtab
 "}
@@ -562,3 +567,6 @@ set t_Co=256 " 256 color mode
 colorscheme gruvbox
 set background=dark
 let g:gruvbox_contrast_dark="hard"
+
+au BufNewFile,BufRead,BufReadPost *.lua set textwidth=0
+

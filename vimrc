@@ -37,7 +37,7 @@ set linebreak
 set dictionary=/usr/share/dict/words
 
 set colorcolumn=+1
-set textwidth=80
+set textwidth=0
 set formatoptions+=t
 set nowrap
 
@@ -83,7 +83,7 @@ if has("gui_running")
   if has("gui_gtk2")
     set guifont=Monaco\ 12
   elseif has("gui_macvim")
-	 set guifont=Monaco:h12
+      set guifont=MonCourier 2
   elseif has("gui_win32")
     set guifont=Monaco:h11:cANSI
   endif
@@ -564,9 +564,9 @@ nnoremap <silent> <F9> :NERDTreeClose<CR>
 let base16colorspace=256 " Access colors present in 256 colorspace
 set t_Co=256 " 256 color mode
 
-colorscheme gruvbox
-set background=dark
-let g:gruvbox_contrast_dark="hard"
+colorscheme wombat256mod
+set background=light
+"let g:gruvbox_contrast_dark="hard"
 
 au BufNewFile,BufRead,BufReadPost *.lua set textwidth=0
 

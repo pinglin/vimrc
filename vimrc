@@ -79,15 +79,6 @@ autocmd VimResized * :wincmd =
 syntax on		" syntax highlight
 set hlsearch	" search highlighting
 
-if has("gui_running")
-  if has("gui_gtk2")
-    set guifont=Monaco\ 12
-  elseif has("gui_macvim")
-      set guifont=MonCourier 2
-  elseif has("gui_win32")
-    set guifont=Monaco:h11:cANSI
-  endif
-endif
 
 set clipboard=unnamed	" yank to the system register (*) by default
 set showmatch		" Cursor shows matching ) and }
@@ -564,9 +555,20 @@ nnoremap <silent> <F9> :NERDTreeClose<CR>
 let base16colorspace=256 " Access colors present in 256 colorspace
 set t_Co=256 " 256 color mode
 
-colorscheme wombat256mod
+colorscheme wombat256
 set background=light
-"let g:gruvbox_contrast_dark="hard"
+
+if has("gui_running")
+  if has("gui_gtk2")
+    set guifont=Monaco\ 12
+  elseif has("gui_macvim")
+      set guifont=Courier:h12
+      colorscheme wombat256
+      set background=dark 
+  elseif has("gui_win32")
+    set guifont=Monaco:h11:cANSI
+  endif
+endif
 
 au BufNewFile,BufRead,BufReadPost *.lua set textwidth=0
 

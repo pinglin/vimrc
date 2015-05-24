@@ -236,18 +236,20 @@ map <leader>[ :cp<CR>
 " set the min height of a window to 0 so we can maximize others
 set wmh=0
 " move to and maximize the below split 
-map <c-j> <c-w>j<c-w>_
+"map <c-j> <c-w>j<c-w>_
 " move to and maximize the above split 
-map <c-k> <c-w>k<c-w>_
+"map <c-k> <c-w>k<c-w>_
 " move to and maximize the left split 
 "map <c-h> <c-w>h<c-w><bar>
 " move to and maximize the right split  
 "map <c-l> <c-w>l<c-w><bar>
 
 "" move to the below split 
-"noremap <c-j> <c-w>j
+nnoremap <C-J> <ESC><C-W>j
+inoremap <C-J> <ESC><C-W>j
 "" move to the above split 
-"noremap <c-k> <c-w>k
+nnoremap <C-K> <ESC><C-W>k
+inoremap <C-K> <ESC><C-W>k
 
 "" move to the left split 
 nnoremap <C-H> <ESC><C-W>h
@@ -554,16 +556,18 @@ nnoremap <silent> <F9> :NERDTreeClose<CR>
 
 let base16colorspace=256 " Access colors present in 256 colorspace
 set t_Co=256 " 256 color mode
+set t_ut= " disable Background Color Erase: http://sunaku.github.io/vim-256color-bce.html
 
-colorscheme wombat256
-set background=light
+let g:gruvbox_italic=0
+colorscheme gruvbox
+set background=dark
 
 if has("gui_running")
   if has("gui_gtk2")
     set guifont=Monaco\ 12
   elseif has("gui_macvim")
-      set guifont=Courier:h12
-      colorscheme wombat256
+      set guifont=Consolas:h12
+      colorscheme gruvbox
       set background=dark 
   elseif has("gui_win32")
     set guifont=Monaco:h11:cANSI

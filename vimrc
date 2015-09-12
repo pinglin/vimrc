@@ -147,7 +147,8 @@ autocmd BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
 
 " C/C++ specific settings
 autocmd FileType c,cpp,cc,h  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
-map <F1> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+inoremap <F4> :!ctags_with_dep.sh *.cpp *c
+nnoremap <F4> :!ctags_with_dep.sh *.cpp *c
 
 "Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
@@ -185,8 +186,8 @@ nnoremap <C-C> :
 " [[ jump out of the tag stack (undo Ctrl-])
 map [[ :po<CR>
 
-noremap <silent> <F2> "=strftime('%Y/%m/%d')<C-M>p
-inoremap <silent> <F2> <C-R>=strftime('%Y/%m/%d')<C-M>
+"noremap <F2> "=strftime('%Y/%m/%d')<C-M>p
+"inoremap <F2> <C-R>=strftime('%Y/%m/%d')<C-M>
 
 " make cursor fixed bewteen insert and normal mode switch
 "autocmd InsertLeave * :normal `^`
@@ -529,10 +530,14 @@ hi link EasyMotionShade  Comment
 
 " --- TagBar {{{
 " toggle TagBar with F7
-nnoremap <silent> <F7> :TagbarToggle<CR> 
+nnoremap <F7> :TagbarToggle<CR> 
 " set focus to TagBar when opening it
-let g:tagbar_autofocus = 1
-let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+let g:tagbar_autofocus = 0
+if has("mac")
+    let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+elseif has("unix")
+    let g:tagbar_ctags_bin = '/usr/bin/ctags'
+endif
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " }}}
 
@@ -541,8 +546,8 @@ let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
 " }}}
 
 " --- NERDTree {{{
-nnoremap <silent> <F8> :NERDTree<CR>
-nnoremap <silent> <F9> :NERDTreeClose<CR>
+nnoremap <F8> :NERDTree<CR>
+nnoremap <F9> :NERDTreeClose<CR>
 " }}}
 
 " --- SnipMate {{{

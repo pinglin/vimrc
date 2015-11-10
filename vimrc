@@ -150,6 +150,10 @@ autocmd FileType c,cpp,cc,h  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e
 inoremap <F4> :!ctags_with_dep.sh *.cpp *c
 nnoremap <F4> :!ctags_with_dep.sh *.cpp *c
 
+" json specific settings
+autocmd BufRead,BufNewFile *.json set expandtab | set shiftwidth=2 | set softtabstop=2
+
+
 "Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
 autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
@@ -162,7 +166,6 @@ fun! Replace()
   :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge' 
   :unlet! s:word 
 endfunction 
-
 
 "--------------------------------------------------------------------------- 
 " USEFUL SHORTCUTS

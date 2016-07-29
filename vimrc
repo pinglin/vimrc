@@ -105,8 +105,8 @@ set tm=500
 
 " TAB setting{
 
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 
 "set tabstop=3
@@ -359,6 +359,7 @@ cmap cd. lcd %:p:h
 
 if has('gui')
 	set guioptions-=e
+	set guioptions-=L
 endif
 if exists("+showtabline")
 	function! MyTabLine()
